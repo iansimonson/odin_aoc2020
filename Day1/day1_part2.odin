@@ -30,8 +30,7 @@ main :: proc() {
 
     sort.slice(data[:]);
 
-    outer_begin := 0;
-    for ;outer_begin < len(data) - 2; outer_begin += 1 {
+    for outer_begin in 0..<len(data) - 2 {
         value_to_find := 2020 - data[outer_begin];
         begin := outer_begin + 1;
         end := len(data) - 1;
