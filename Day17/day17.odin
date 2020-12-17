@@ -8,7 +8,7 @@ import "core:sort"
 import "core:container"
 import "core:math/bits"
 
-Point3 :: distinct [3]int;
+Point4 :: distinct [4]int;
 
 
 main :: proc() {
@@ -18,10 +18,10 @@ main :: proc() {
     }
     defer delete(inputData);
 
-    world := make(map[Point3]bool);
+    world := make(map[Point4]bool);
     defer delete(world);
 
-    second_world := make(map[Point3]bool);
+    second_world := make(map[Point4]bool);
     defer delete(second_world);
 
     lines := strings.split(string(inputData), "\n");
@@ -30,16 +30,16 @@ main :: proc() {
     for line, i in lines {
         for cube, j in line {
             if cube == '#' {
-                world[Point3{i, j, 0}] = true;
+                world[Point4{i, j, 0, 0}] = true;
             } else {
-                world[Point3{i, j, 0}] = false;
+                world[Point4{i, j, 0, 0}] = false;
             }
         }
     }
 
     for i in 0..<6 {
         add_neighbors(&world);
-        current_points := make([dynamic]Point3);
+        current_points := make([dynamic]Point4);
         defer delete(current_points);
 
         for k, _ in world {
@@ -74,8 +74,8 @@ main :: proc() {
     fmt.println(sum);
 }
 
-add_neighbors :: proc(m: ^map[Point3]bool) {
-    current_points := make([dynamic]Point3);
+add_neighbors :: proc(m: ^map[Point4]bool) {
+    current_points := make([dynamic]Point4);
     defer delete(current_points);
 
     for k, _ in m {
@@ -86,7 +86,7 @@ add_neighbors :: proc(m: ^map[Point3]bool) {
         for i in v.x - 1..v.x + 1 {
             for j in v.y - 1..v.y + 1 {
                 for k in v.z - 1..v.z + 1 {
-                    key := Point3{i, j, k};
+                    key := Point4{i, j, k, 0};
                     cur_val := m[key];
                     m[key] = cur_val;
                 }
@@ -95,13 +95,13 @@ add_neighbors :: proc(m: ^map[Point3]bool) {
     }
 }
 
-active_neighbors :: proc(m: ^map[Point3]bool, p: Point3) -> int {
+active_neighbors :: proc(m: ^map[Point4]bool, p: Point4) -> int {
     active := 0;
     for i in p.x - 1..p.x + 1 {
         for j in p.y - 1..p.y + 1 {
             for k in p.z - 1..p.z + 1 {
-                if (Point3{i, j, k} == p ){ continue; }
-                v := m[Point3{i, j, k}];
+                if (Point4{i, j, k, 0} == p ){ continue; }
+                v := m[Point4{i, j, k, 0}];
                 if v {
                     active += 1;
                 }
