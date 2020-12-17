@@ -86,9 +86,11 @@ add_neighbors :: proc(m: ^map[Point4]bool) {
         for i in v.x - 1..v.x + 1 {
             for j in v.y - 1..v.y + 1 {
                 for k in v.z - 1..v.z + 1 {
-                    key := Point4{i, j, k, 0};
-                    cur_val := m[key];
-                    m[key] = cur_val;
+                    for a in v.w - 1..v.w + 1 {
+                        key := Point4{i, j, k, a};
+                        cur_val := m[key];
+                        m[key] = cur_val;
+                    }
                 }
             }
         }
@@ -100,10 +102,12 @@ active_neighbors :: proc(m: ^map[Point4]bool, p: Point4) -> int {
     for i in p.x - 1..p.x + 1 {
         for j in p.y - 1..p.y + 1 {
             for k in p.z - 1..p.z + 1 {
-                if (Point4{i, j, k, 0} == p ){ continue; }
-                v := m[Point4{i, j, k, 0}];
-                if v {
-                    active += 1;
+                for a in p.w -1..p.w + 1 {
+                    if (Point4{i, j, k, a} == p ){ continue; }
+                    v := m[Point4{i, j, k, a}];
+                    if v {
+                        active += 1;
+                    }
                 }
             }
         }
